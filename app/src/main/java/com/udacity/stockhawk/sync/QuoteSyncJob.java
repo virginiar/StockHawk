@@ -8,7 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -71,9 +75,16 @@ public final class QuoteSyncJob {
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
 
-
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
+
+                // Handle non-existent stock
+                if (quote.getPrice() == null) {
+                    Timber.d(symbol + " is not a valid stock. Removing");
+                    PrefUtils.removeStock(context, symbol);
+                    sendNotValidToast(context, symbol);
+                    continue;
+                }
 
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
@@ -97,7 +108,6 @@ public final class QuoteSyncJob {
                 quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
                 quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
                 quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
 
                 quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
 
@@ -168,5 +178,13 @@ public final class QuoteSyncJob {
         }
     }
 
-
+    private static void sendNotValidToast(final Context context, final String symbol) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, context.getString(R.string.toast_no_valid_symbol, symbol), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
