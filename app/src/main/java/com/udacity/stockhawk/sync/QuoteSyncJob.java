@@ -80,7 +80,7 @@ public final class QuoteSyncJob {
 
                 // Handle non-existent stock
                 if (quote.getPrice() == null) {
-                    Timber.d(symbol + " is not a valid stock. Removing");
+                    Timber.d("%s is not a valid stock. Removing", symbol);
                     PrefUtils.removeStock(context, symbol);
                     sendNotValidToast(context, symbol);
                     continue;
