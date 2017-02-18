@@ -2,6 +2,7 @@ package com.udacity.stockhawk.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -9,12 +10,17 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,16 +86,46 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private void setData(String history) {
         List<Entry> entries = new ArrayList<>();
         String[] historyArray = history.split("\n");
+        final List<Long> dates = new ArrayList<>();
+        int count = 0;
 
-        for (int i = 0; i < historyArray.length; i++) {
+        for (int i = historyArray.length - 1; i > 0; i--) {
             String[] value = historyArray[i].split(",");
+            Long date = Long.valueOf(value[DATE]);
+            dates.add(date);
             Float stock = Float.valueOf(value[STOCK]);
-            entries.add(new Entry(i, stock));
+            entries.add(new Entry(count++, stock));
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "label");
+        LineDataSet dataSet = new LineDataSet(entries, mSymbol);
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
         lineChart.invalidate();
+
+        lineData.setValueTextColor(Color.WHITE);
+        lineData.setValueTextSize(9f);
+        lineChart.getLegend().setEnabled(false);
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(10f);
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextSize(10f);
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setTextColor(Color.WHITE);
+        rightAxis.setTextSize(10f);
+
+
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM");
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mFormat.format(dates.get((int) value));
+            }
+        });
+
+        lineChart.setExtraOffsets(5f, 15f, 5f, 15f);
+        lineChart.getDescription().setEnabled(false);
     }
 }
