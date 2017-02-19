@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -88,12 +89,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         String[] historyArray = history.split("\n");
         final List<Long> dates = new ArrayList<>();
         int count = 0;
-
+        // It is necessary to reverse the dates
         for (int i = historyArray.length - 1; i > 0; i--) {
             String[] value = historyArray[i].split(",");
             Long date = Long.valueOf(value[DATE]);
             dates.add(date);
             Float stock = Float.valueOf(value[STOCK]);
+            // Add data in natural order
             entries.add(new Entry(count++, stock));
         }
 
@@ -102,9 +104,19 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         lineChart.setData(lineData);
         lineChart.invalidate();
 
-        lineData.setValueTextColor(Color.WHITE);
-        lineData.setValueTextSize(9f);
         lineChart.getLegend().setEnabled(false);
+        lineChart.setExtraOffsets(5f, 15f, 5f, 15f);
+        //lineChart.getDescription().setEnabled(false);
+
+        Description description = new Description();
+        description.setText(getString(R.string.chart_description, mSymbol));
+        lineChart.setDescription(description);
+        lineChart.setContentDescription(getString(R.string.chart_description, mSymbol));
+        description.setTextColor(Color.WHITE);
+        description.setTextSize(15f);
+
+        lineData.setValueTextColor(Color.WHITE);
+        lineData.setValueTextSize(10f);
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setTextColor(Color.WHITE);
         xAxis.setTextSize(10f);
@@ -125,7 +137,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
-        lineChart.setExtraOffsets(5f, 15f, 5f, 15f);
-        lineChart.getDescription().setEnabled(false);
+
     }
 }
