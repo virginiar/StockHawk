@@ -24,6 +24,7 @@ import com.udacity.stockhawk.data.Contract;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +33,7 @@ import timber.log.Timber;
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /* Tag for intent extra data*/
-    static final String EXTRA_SYMBOL = "EXTRA_SYMBOL";
+    public static final String EXTRA_SYMBOL = "EXTRA_SYMBOL";
 
     private static final int DETAIL_LOADER = 1;
     final private static int DATE = 0;
@@ -129,7 +130,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
 
         xAxis.setValueFormatter(new IAxisValueFormatter() {
-            private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM");
+            private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM", Locale.US);
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {

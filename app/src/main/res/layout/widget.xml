@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/widget"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/widget_height_title"
+        android:background="@color/colorPrimary"
+        android:paddingEnd="@dimen/widget_margin"
+        android:paddingStart="@dimen/widget_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/widget_background"
+        android:paddingEnd="@dimen/widget_margin"
+        android:paddingStart="@dimen/widget_margin">
+
+        <ListView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            tools:listitem="@layout/widget_list_item" />
+
+        <TextView
+            android:id="@+id/widget_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            android:text="@string/error_no_stocks"
+            android:textAppearance="?android:textAppearanceLarge" />
+    </FrameLayout>
+
+
+</LinearLayout>
