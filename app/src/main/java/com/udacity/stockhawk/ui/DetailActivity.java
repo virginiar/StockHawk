@@ -54,9 +54,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             mSymbol = intent.getStringExtra(EXTRA_SYMBOL);
             Timber.d("symbol: %s", mSymbol);
             getSupportLoaderManager().initLoader(DETAIL_LOADER, null, this);
-            //errorView.setText(symbol);
-            //errorView.setVisibility(View.VISIBLE);
-
         }
     }
 

@@ -19,15 +19,12 @@ import timber.log.Timber;
 public class StockWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        //String symbol = "GOOG";
         Timber.d("Starting Widget");
 
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(
                     context.getPackageName(),
                     R.layout.widget);
-
-            //views.setTextViewText(R.id.widget_symbol, symbol);
 
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent
